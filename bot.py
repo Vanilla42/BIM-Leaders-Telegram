@@ -23,7 +23,7 @@ async def process_event(update, dp:Dispatcher):
 
 # Serverless entry point
 async def main(**kwargs):
-  bot = Bot(token = config.TOKEN)
+  bot = Bot(token = "5249729175:AAHfTrJdQhdokgTUAIxPsAlRkEUlxmVUnAk")
   dp = Dispatcher(bot)
   
   await register_handlers(dp)
