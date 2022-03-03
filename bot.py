@@ -14,6 +14,16 @@ dp = Dispatcher(bot)
 async def echo(message: types.Message):
   await message.answer(message.text)
  
-# Run long-polling
-if __name__ == "__main__":
-  executor.start_polling(dp, skip_updates=True)
+def main():
+    # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+
+    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(MessageHandler(Filters.text, echo))
+    
+    # Run long-polling
+    executor.start_polling(dp, skip_updates=True)
+
+if __name__ == '__main__':
+    main()
