@@ -1,1 +1,1 @@
-import sys
+TOKEN = "5249729175:AAHfTrJdQhdokgTUAIxPsAlRkEUlxmVUnAk"
