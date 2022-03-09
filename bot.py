@@ -23,7 +23,7 @@ def create_db_table():
     connection.close()
     return True
 
-def read_db_table_all():
+def read_db_all():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     data = cursor.execute('SELECT * FROM shopping ORDERBY col_user_id')
@@ -31,7 +31,7 @@ def read_db_table_all():
     connection.close()
     return data
 
-def read_db_table_user(user_id):
+def read_db_user(user_id):
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     data = cursor.execute('SELECT * FROM shopping WHERE col_user_id=%(user_id)s ORDERBY col_user_id')
@@ -39,7 +39,7 @@ def read_db_table_user(user_id):
     connection.close()
     return data
 
-def add_db_table(date, user_id, item):
+def add_db_row(date, user_id, item):
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     cursor.execute('INSERT INTO shopping VALUES (%(date)s, %(user_id)s, %(item)s)')
