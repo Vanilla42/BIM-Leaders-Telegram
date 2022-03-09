@@ -14,13 +14,21 @@ DB_HOST = os.environ['DB_HOST']
 connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
 cursor = connection.cursor()
 
+# Wrapper
+def db_handler(func):
+    def wrap(*args, **kwargs):
+        connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+        cursor = connection.cursor()
+        data = func(*args, **kwargs)
+        cursor.close()
+        connection.close()
+        return data
+    return wrap
+
+@db_handler
 def create_db_table():
     # date | user_id | item
-    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
-    cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
-    cursor.close()
-    connection.close()
     return True
 
 def read_db_all():
