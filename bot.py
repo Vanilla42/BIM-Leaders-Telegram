@@ -3,8 +3,52 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import time
 import datetime
+import psycopg2
 
 
+# Database connection
+DB_NAME = os.environ['DB_NAME']
+DB_USER = os.environ['DB_USER']
+DB_PASS = os.environ['DB_PASS']
+DB_HOST = os.environ['DB_HOST']
+connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+cursor = connection.cursor()
+
+def create_db_table():
+    # date | user_id | item
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
+    cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
+    cursor.close()
+    connection.close()
+    return True
+
+def read_db_table_all():
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
+    data = cursor.execute('SELECT * FROM shopping ORDERBY col_user_id')
+    cursor.close()
+    connection.close()
+    return data
+
+def read_db_table_user(user_id):
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
+    data = cursor.execute('SELECT * FROM shopping WHERE col_user_id=%(user_id)s ORDERBY col_user_id')
+    cursor.close()
+    connection.close()
+    return data
+
+def add_db_table(date, user_id, item):
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
+    cursor.execute('INSERT INTO shopping VALUES (%(date)s, %(user_id)s, %(item)s)')
+    cursor.close()
+    connection.close()
+    return True
+
+
+# Bot initiation
 API_KEY = os.environ['TOKEN']
 bot = telebot.TeleBot(API_KEY)
 
@@ -21,11 +65,11 @@ def get_time():
   return t
 
 kitchen_workers = [
-  [["Денис", "Альбіна"],["Назар", "Маша", "Артем"],["Слава", "Денис"]],
-  [["Слава", "Артем"],["Авраменко Іван", "Олександр", "Альбіна"],["Назар", "Артем"]],
-  [["Назар", "Денис"],["Маша", "Стас", "Слава"],["Альбіна", "Авраменко Іван"]],
-  [["Авраменко Іван", "Олександр"],["Артем", "Денис", "Альбіна"],["Стас", "Назар"]],
-  [["Маша", "Стас"],["Слава", "Альбіна", "Назар"],["Денис", "Артем"]],
+  [["Денис", "Альбіна"],["Крупка Назар", "Маша", "Артем"],["Слава", "Денис"]],
+  [["Слава", "Артем"],["Авраменко Іван", "Олександр", "Альбіна"],["Крупка Назар", "Артем"]],
+  [["Крупка Назар", "Денис"],["Маша", "Стас", "Слава"],["Альбіна", "Авраменко Іван"]],
+  [["Авраменко Іван", "Олександр"],["Артем", "Денис", "Альбіна"],["Стас", "Крупка Назар"]],
+  [["Маша", "Стас"],["Слава", "Альбіна", "Крупка Назар"],["Денис", "Артем"]],
   [["Савіна Юлія", "Тюріна Тіна"],["Денис", "Романюк Катерина", "Ганін Петро"],["Маша", "Цвігун Людмила"]],
   [["Зотіна Анастасія", "Авраменко Іван"],["Ткаченко Вікторія", "Слава", "Шавловська Яна"],["Наголюк Євген", "Авраменко Антоніна"]]
 ]
@@ -35,7 +79,7 @@ kitchen_heplers = [
   [["Ганін Петро", "Редчиць Денис"],["Ткаченко Вікторія", "Проскурня Михайло"],["Півень Денис", "Савіна Юлія"]],
   [["Шавловська Яна", "Романюк Катерина"],["Савіна Юлія", "Алєксєєв Еміль"],["Цвігун Людмила", "Редчиць Денис"]],
   [["Стас", "Чаур Анастасія"],["Півень Денис", "Зотіна Анастасія"],["Тюріна Тіна", "Алєксєєв Еміль"]],
-  [["Назар", "Альбіна"],["Авраменко Іван", "Олександр"],["Авраменко Іван", "Ткаченко Вікторія"]],
+  [["Крупка Назар", "Альбіна"],["Авраменко Іван", "Олександр"],["Авраменко Іван", "Ткаченко Вікторія"]],
   [["Пінчук Іван", "Алєксєєв Еміль"],["Авраменко Антоніна", "Чаур Анастасія"],["Проскурня Михайло", "Шавловська Яна"]]
 ]
 
@@ -64,7 +108,16 @@ def kitchen(message):
   time.sleep(10)
   bot.delete_message(chat_id, message_bot_kitchen.message_id) 
   
-
+@bot.message_handler(commands=['shop'])
+def shop(message):
+  chat_id = message.chat.id
+  bot.delete_message(chat_id, message.message_id)
+  #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
+  message_bot_kitchen = bot.send_message(chat_id, message_kitchen(), parse_mode 
+ = "MarkdownV2", disable_notification=True)
+  
+  time.sleep(10)
+  bot.delete_message(chat_id, message_bot_kitchen.message_id) 
 
 """
 def gen_markup():
