@@ -156,7 +156,7 @@ def shop_command_add(message):
 
 
 def shop_markup():
-  markup = ReplyKeyboardMarkup(row_width=3)
+  markup = InlineKeyboardMarkup(row_width=3)
   btn1 = InlineKeyboardButton("\U0001F4C3 Список", callback_data="shop_call_list")
   btn2 = InlineKeyboardButton("\U00002795 Замовити", callback_data="shop_call_add")
   btn3 = InlineKeyboardButton("\U00002796 Відмінити", callback_data="shop_call_del")
@@ -164,19 +164,19 @@ def shop_markup():
   return markup
 
 def shop_markup_add():
-  markup = ReplyKeyboardMarkup(row_width=1)
+  markup = InlineKeyboardMarkup(row_width=1)
   btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_del():
-  markup = ReplyKeyboardMarkup(row_width=1)
+  markup = InlineKeyboardMarkup(row_width=1)
   btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_list():
-  markup = ReplyKeyboardMarkup(row_width=3)
+  markup = InlineKeyboardMarkup(row_width=3)
   btn1 = InlineKeyboardButton("\U0001F4C3 Мой список", callback_data="shop_call_list_my")
   btn2 = InlineKeyboardButton("\U00002795 Весь список", callback_data="shop_call_list_all")
   btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
@@ -184,7 +184,7 @@ def shop_markup_list():
   return markup
 
 def shop_markup_list_all():
-  markup = ReplyKeyboardMarkup(row_width=3)
+  markup = InlineKeyboardMarkup(row_width=3)
   btn1 = InlineKeyboardButton("\U0001F4C3 Замовити", callback_data="shop_call_add")
   btn2 = InlineKeyboardButton("\U00002795 Відмінити", callback_data="shop_call_del")
   btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
@@ -192,7 +192,7 @@ def shop_markup_list_all():
   return markup
 
 def shop_markup_list_my():
-  markup = ReplyKeyboardMarkup(row_width=3)
+  markup = InlineKeyboardMarkup(row_width=3)
   btn1 = InlineKeyboardButton("\U0001F4C3 Замовити", callback_data="shop_call_add")
   btn2 = InlineKeyboardButton("\U00002795 Відмінити", callback_data="shop_call_del")
   btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
