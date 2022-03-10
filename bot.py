@@ -1,6 +1,6 @@
 import os
 import telebot
-from telebot import types
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 import time
 import datetime
 import psycopg2
