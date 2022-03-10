@@ -1,6 +1,6 @@
 import os
 import telebot
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import time
 import datetime
 import psycopg2
@@ -157,61 +157,62 @@ def shop_command_add(message):
 
 def shop_markup():
   markup = ReplyKeyboardMarkup(row_width=3)
-  btn1 = KeyboardButton("\U0001F4C3 Список", callback_data="shop_markup_list")
-  btn2 = KeyboardButton("\U00002795 Замовити", callback_data="shop_markup_add")
-  btn3 = KeyboardButton("\U00002796 Відмінити", callback_data="shop_markup_del")
+  btn1 = InlineKeyboardButton("\U0001F4C3 Список", callback_data="shop_call_list")
+  btn2 = InlineKeyboardButton("\U00002795 Замовити", callback_data="shop_call_add")
+  btn3 = InlineKeyboardButton("\U00002796 Відмінити", callback_data="shop_call_del")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_add():
   markup = ReplyKeyboardMarkup(row_width=1)
-  btn3 = KeyboardButton("\U00002795 Назад", callback_data="shop_markup")
+  btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_del():
   markup = ReplyKeyboardMarkup(row_width=1)
-  btn3 = KeyboardButton("\U00002795 Назад", callback_data="shop_markup")
+  btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_list():
   markup = ReplyKeyboardMarkup(row_width=3)
-  btn1 = KeyboardButton("\U0001F4C3 Мой список", callback_data="shop_markup_list_all")
-  btn2 = KeyboardButton("\U00002795 Весь список", callback_data="shop_markup_list_my")
-  btn3 = KeyboardButton("\U00002795 Назад", callback_data="shop_markup")
+  btn1 = InlineKeyboardButton("\U0001F4C3 Мой список", callback_data="shop_call_list_my")
+  btn2 = InlineKeyboardButton("\U00002795 Весь список", callback_data="shop_call_list_all")
+  btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_list_all():
   markup = ReplyKeyboardMarkup(row_width=3)
-  btn1 = KeyboardButton("\U0001F4C3 Замовити", callback_data="shop_markup_add")
-  btn2 = KeyboardButton("\U00002795 Відмінити", callback_data="shop_markup_del")
-  btn3 = KeyboardButton("\U00002795 Назад", callback_data="shop_markup_list")
+  btn1 = InlineKeyboardButton("\U0001F4C3 Замовити", callback_data="shop_call_add")
+  btn2 = InlineKeyboardButton("\U00002795 Відмінити", callback_data="shop_call_del")
+  btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
 def shop_markup_list_my():
   markup = ReplyKeyboardMarkup(row_width=3)
-  btn1 = KeyboardButton("\U0001F4C3 Замовити", callback_data="shop_markup_add")
-  btn2 = KeyboardButton("\U00002795 Відмінити", callback_data="shop_markup_del")
-  btn3 = KeyboardButton("\U00002795 Назад", callback_data="shop_markup_list")
+  btn1 = InlineKeyboardButton("\U0001F4C3 Замовити", callback_data="shop_call_add")
+  btn2 = InlineKeyboardButton("\U00002795 Відмінити", callback_data="shop_call_del")
+  btn3 = InlineKeyboardButton("\U00002795 Назад", callback_data="shop_call")
   markup.add(btn1, btn2, btn3)
   return markup
 
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
-  if call.data == "shop_markup_list":
+  if call.data == "shop_call_list":
     shop_command_list()
-  elif call.data == "shop_markup_add":
+  elif call.data == "shop_call_add":
     shop_command_add()
-  elif call.data == "shop_markup_del":
+  elif call.data == "shop_call_del":
     shop_command_del()
-  elif call.data == "shop_markup_list_all":
+  elif call.data == "shop_call_list_all":
     shop_command_list_all()
-  elif call.data == "shop_markup_list_my":
+  elif call.data == "shop_call_list_my":
     shop_command_list_my()
-  elif call.data == "shop_markup":
+  elif call.data == "shop_call":
     shop_command()
  
 
