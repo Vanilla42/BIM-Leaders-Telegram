@@ -149,7 +149,7 @@ def shop_command_add(message):
   #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
   shop_message_add = bot.send_message(chat_id, "Введіть що додати у список.", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
 
-  db_add_row(datetime.datetime.today(), message.from.id, item)
+  db_add_row(datetime.datetime.today(), message.from_user.id, item)
 
   #time.sleep(20)
   #bot.delete_message(chat_id, message_bot_shop.message_id)
