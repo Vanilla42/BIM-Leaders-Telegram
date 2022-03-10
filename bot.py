@@ -133,7 +133,7 @@ def shop_command(message):
   chat_id = message.chat.id
   bot.delete_message(chat_id, message.message_id)
   #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
-  message_bot_shop = bot.send_message(chat_id, shop_message(), parse_mode = "MarkdownV2", disable_notification=True, reply_markup=markup_shop())
+  message_bot_shop = bot.send_message(chat_id, shop_message(), parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup())
   
   #time.sleep(20)
   #bot.delete_message(chat_id, message_bot_shop.message_id)
