@@ -143,16 +143,23 @@ def shop_message():
   return message
 
 @bot.message_handler
-def shop_command_add(message):
+def shop_command_list(message):
   chat_id = message.chat.id
   bot.delete_message(chat_id, message.message_id)
   #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
-  shop_message_add = bot.send_message(chat_id, "Введіть що додати у список.", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  shop_message_add = bot.send_message(chat_id, "Введіть що додати у список", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
 
   db_add_row(datetime.datetime.today(), message.from_user.id, item)
 
   #time.sleep(20)
   #bot.delete_message(chat_id, message_bot_shop.message_id)
+
+@bot.message_handler
+def shop_command_add(message):
+  chat_id = message.chat.id
+  shop_message_add_text = db_read_all()
+  shop_message_add = bot.send_message(chat_id, shop_message_add_text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  return shop_message_add
 
 
 def shop_markup():
@@ -203,17 +210,17 @@ def shop_markup_list_my():
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
   if call.data == "shop_call_list":
-    shop_command_list()
+    shop_command_list(message)
   elif call.data == "shop_call_add":
-    shop_command_add()
+    shop_command_add(message)
   elif call.data == "shop_call_del":
-    shop_command_del()
+    shop_command_del(message)
   elif call.data == "shop_call_list_all":
-    shop_command_list_all()
+    shop_command_list_all(message)
   elif call.data == "shop_call_list_my":
-    shop_command_list_my()
+    shop_command_list_my(message)
   elif call.data == "shop_call":
-    shop_command()
+    shop_command(message)
  
 
 """
