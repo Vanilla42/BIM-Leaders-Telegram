@@ -139,7 +139,7 @@ def shop_command(message):
   #bot.delete_message(chat_id, message_bot_shop.message_id)
 
 def shop_message():
-  message = "Я допоможу із покупками\! Виберіть опцію нижче."
+  message = "Я допоможу із покупками\! Виберіть опцію нижче"
   return message
 
 @bot.message_handler
