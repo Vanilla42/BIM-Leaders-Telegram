@@ -41,7 +41,7 @@ def db_create_table():
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
     cursor.execute("INSERT INTO shopping (col_date, col_user_id, col_item) VALUES (%s, %s, %s)", ("test", "test", "test"))
-    b = cursor.execute("SELECT * FROM shopping ORDERBY col_user_id")
+    b = cursor.execute("SELECT * FROM shopping")
     cursor.close()
     connection.close()
     return b
