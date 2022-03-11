@@ -74,9 +74,14 @@ def db_add_row(date, user_id, item):
 @bot.message_handler(commands=['kitchen'])
 def kitchen_command(message):
   chat_id = message.chat.id
-  bot.delete_message(chat_id, message.message_id)
+  bot.delete_message(message.chat.id, message.message_id)
   #message_bot_kitchen = bot.send_message(message.chat.id, kitchen_message(), reply_markup=markup_delete())
-  message_bot_kitchen = bot.send_message(chat_id, kitchen_message(), parse_mode = "MarkdownV2", disable_notification=True)
+  message_bot_kitchen = bot.send_message(
+    message.chat.id,
+    kitchen_message(),
+    parse_mode = "MarkdownV2",
+    disable_notification=True
+  )
   
   time.sleep(10)
   bot.delete_message(chat_id, message_bot_kitchen.message_id) 
@@ -132,7 +137,7 @@ kitchen_heplers = [
 
 @bot.message_handler(commands=['shop'])
 def shop_command(message):
-  bot.delete_message(chat_id, message.message_id)
+  bot.delete_message(message.chat.id, message.message_id)
   message_bot_shop = bot.send_message(
     message.chat.id,
     "Я допоможу із покупками\! Виберіть опцію нижче",
@@ -157,11 +162,9 @@ def shop_command_list(message):
 
 @bot.message_handler
 def shop_command_add(message):
-  chat_id = message.chat.id
-  text = db_read_all()
   shop_message_add = bot.send_message(
     message.chat.id,
-    text,
+    db_read_all(),
     reply_markup=shop_markup_add(),
     parse_mode = "MarkdownV2",
     disable_notification=True,
@@ -170,9 +173,13 @@ def shop_command_add(message):
 
 @bot.message_handler
 def shop_command_del(message):
-  chat_id = message.chat.id
-  text = db_read_all()
-  shop_message_del = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  shop_message_del = bot.send_message(
+    message.chat.id,
+    db_read_all(),
+    reply_markup=shop_markup_add(),
+    parse_mode = "MarkdownV2",
+    disable_notification=True
+  )
   return shop_message_del
 
 def shop_markup():
