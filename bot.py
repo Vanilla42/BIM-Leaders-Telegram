@@ -40,10 +40,17 @@ def db_create_table():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
-    cursor.execute("INSERT INTO shopping (col_date, col_user_id, col_item) VALUES (%s, %s, %s)", ("test", "test", "test"))
+    cursor.execute("INSERT INTO shopping (col_date, col_user_id, col_item) VALUES (%s, %s, %s)", ("Дата", "ID", "Товар"))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
     b = cursor.execute("SELECT * FROM shopping")
     cursor.close()
     connection.close()
+
     return b
 
 def db_read_all():
