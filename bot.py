@@ -135,6 +135,21 @@ def shop_command(message):
   #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
   message_bot_shop = bot.send_message(chat_id, shop_message(), parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup())
   
+  @bot.callback_query_handler(func=lambda call: True)
+  def callback_query(call):
+    if call.data == "shop_call_list":
+        shop_command_list(message)
+    elif call.data == "shop_call_add":
+        shop_command_add(message)
+    elif call.data == "shop_call_del":
+        shop_command_del(message)
+    elif call.data == "shop_call_list_all":
+        shop_command_list_all(message)
+    elif call.data == "shop_call_list_my":
+        shop_command_list_my(message)
+    elif call.data == "shop_call":
+        shop_command(message)
+
   #time.sleep(20)
   #bot.delete_message(chat_id, message_bot_shop.message_id)
 
@@ -206,21 +221,6 @@ def shop_markup_list_my():
   markup.add(btn1, btn2, btn3)
   return markup
 
-
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query(call):
-  if call.data == "shop_call_list":
-    shop_command_list(message)
-  elif call.data == "shop_call_add":
-    shop_command_add(message)
-  elif call.data == "shop_call_del":
-    shop_command_del(message)
-  elif call.data == "shop_call_list_all":
-    shop_command_list_all(message)
-  elif call.data == "shop_call_list_my":
-    shop_command_list_my(message)
-  elif call.data == "shop_call":
-    shop_command(message)
  
 
 """
