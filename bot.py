@@ -149,9 +149,6 @@ def shop_command(message):
 @bot.message_handler
 def shop_command_list(message):
   bot.send_chat_action(message.chat.id, 'typing') # The typing state into the chat, so the bot will display the “typing” indicator.
-  bot.delete_message(message.chat.id, message.message_id)
-  if db_check_table_null():
-    db_create_table()
   bot.send_message(
     message.chat.id,
     db_read_all(),
@@ -159,6 +156,7 @@ def shop_command_list(message):
     parse_mode = "MarkdownV2",
     disable_notification=True
   )
+  bot.delete_message(message.chat.id, message.message_id)
 
 @bot.message_handler
 def shop_command_add(message):
@@ -230,6 +228,7 @@ def shop_markup_list_my():
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
   if call.data == "shop_call_list":
+    db_create_table
     shop_call_command_list(call)
   elif call.data == "shop_call_add":
     shop_call_command_add(call)
