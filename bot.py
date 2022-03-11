@@ -34,7 +34,7 @@ def db_handler(func):
         return data
     return wrap
 
-@db_handler
+#@db_handler
 def db_create_table():
     # date | user_id | item
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
