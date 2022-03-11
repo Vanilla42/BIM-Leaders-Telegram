@@ -133,49 +133,32 @@ def shop_command(message):
   chat_id = message.chat.id
   bot.delete_message(chat_id, message.message_id)
   #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
-  message_bot_shop = bot.send_message(chat_id, shop_message(), parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup())
+  message_bot_shop = bot.send_message(chat_id, "Я допоможу із покупками\! Виберіть опцію нижче", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup())
   
-  @bot.callback_query_handler(func=lambda call: True)
-  def callback_query(call):
-    if call.data == "shop_call_list":
-        shop_command_list(message)
-    elif call.data == "shop_call_add":
-        shop_command_add(message)
-    elif call.data == "shop_call_del":
-        shop_command_del(message)
-    elif call.data == "shop_call_list_all":
-        shop_command_list_all(message)
-    elif call.data == "shop_call_list_my":
-        shop_command_list_my(message)
-    elif call.data == "shop_call":
-        shop_command(message)
-
   #time.sleep(20)
   #bot.delete_message(chat_id, message_bot_shop.message_id)
-
-def shop_message():
-  message = "Я допоможу із покупками\! Виберіть опцію нижче"
-  return message
 
 @bot.message_handler
 def shop_command_list(message):
   chat_id = message.chat.id
-  bot.delete_message(chat_id, message.message_id)
-  #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
-  shop_message_add = bot.send_message(chat_id, "Введіть що додати у список", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
-
+  text = db_read_all()
+  shop_message_list = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
   db_add_row(datetime.datetime.today(), message.from_user.id, item)
-
-  #time.sleep(20)
-  #bot.delete_message(chat_id, message_bot_shop.message_id)
+  return shop_message_list
 
 @bot.message_handler
 def shop_command_add(message):
   chat_id = message.chat.id
-  shop_message_add_text = db_read_all()
-  shop_message_add = bot.send_message(chat_id, shop_message_add_text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  text = db_read_all()
+  shop_message_add = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
   return shop_message_add
 
+@bot.message_handler
+def shop_command_del(message):
+  chat_id = message.chat.id
+  text = db_read_all()
+  shop_message_del = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  return shop_message_del
 
 def shop_markup():
   markup = InlineKeyboardMarkup(row_width=3)
@@ -221,7 +204,25 @@ def shop_markup_list_my():
   markup.add(btn1, btn2, btn3)
   return markup
 
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+  if call.data == "shop_call_list":
+    shop_call_command_list(call)
+  elif call.data == "shop_call_add":
+    shop_call_command_add(call)
+  elif call.data == "shop_call_del":
+    shop_call_command_del(call)
+  elif call.data == "shop_call_list_all":
+    shop_call_command_list_all(call)
+  elif call.data == "shop_call_list_my":
+    shop_call_command_list_my(call)
+  elif call.data == "shop_call":
+    shop_call_command(call)
  
+def shop_call_command_list(call):
+   bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
+   shop_command_list(call.message)
 
 """
 @bot.callback_query_handler(func=lambda call: True)
