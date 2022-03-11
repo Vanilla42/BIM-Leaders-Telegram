@@ -141,7 +141,8 @@ def shop_command(message):
 @bot.message_handler
 def shop_command_list(message):
   chat_id = message.chat.id
-  text = db_read_all()
+  #text = db_read_all()
+  text = "78678"
   shop_message_list = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
   db_add_row(datetime.datetime.today(), message.from_user.id, item)
   return shop_message_list
@@ -223,6 +224,14 @@ def callback_query(call):
 def shop_call_command_list(call):
    bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
    shop_command_list(call.message)
+
+def shop_call_command_add(call):
+   bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
+   shop_command_add(call.message)
+
+def shop_call_command_del(call):
+   bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
+   shop_command_del(call.message)
 
 """
 @bot.callback_query_handler(func=lambda call: True)
