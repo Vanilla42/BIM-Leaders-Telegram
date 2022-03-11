@@ -37,8 +37,11 @@ def db_handler(func):
 @db_handler
 def db_create_table():
     # date | user_id | item
+    connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
+    cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
-    return True
+    cursor.close()
+    connection.close()
 
 def db_read_all():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
