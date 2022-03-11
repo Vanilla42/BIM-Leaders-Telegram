@@ -228,7 +228,7 @@ def shop_markup_list_my():
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
   if call.data == "shop_call_list":
-    db_create_table
+    db_create_table()
     shop_call_command_list(call)
   elif call.data == "shop_call_add":
     shop_call_command_add(call)
