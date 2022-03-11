@@ -40,7 +40,7 @@ def db_create_table():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
-    cursor.execute('INSERT INTO shopping VALUES (test, test, test)')
+    cursor.execute('INSERT INTO shopping (col_date, col_user_id, col_item) VALUES (test, test, test)')
     cursor.close()
     connection.close()
 
