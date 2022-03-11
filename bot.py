@@ -44,6 +44,8 @@ def db_read_all():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
     cursor = connection.cursor()
     data = cursor.execute('SELECT * FROM shopping ORDERBY col_user_id')
+    if data == None:
+        db_create_table()
     cursor.close()
     connection.close()
     return data
@@ -130,22 +132,28 @@ kitchen_heplers = [
 
 @bot.message_handler(commands=['shop'])
 def shop_command(message):
-  chat_id = message.chat.id
   bot.delete_message(chat_id, message.message_id)
-  #message_bot_kitchen = bot.send_message(message.chat.id, message_kitchen(), reply_markup=markup_delete())
-  message_bot_shop = bot.send_message(chat_id, "Я допоможу із покупками\! Виберіть опцію нижче", parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup())
-  
-  #time.sleep(20)
-  #bot.delete_message(chat_id, message_bot_shop.message_id)
+  message_bot_shop = bot.send_message(
+    message.chat.id,
+    "Я допоможу із покупками\! Виберіть опцію нижче",
+    reply_markup=shop_markup(),
+    parse_mode = "MarkdownV2",
+    disable_notification=True,
+  )
 
 @bot.message_handler
 def shop_command_list(message):
-  chat_id = message.chat.id
-  #text = db_read_all()
-  text = "78678"
-  shop_message_list = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
-  db_add_row(datetime.datetime.today(), message.from_user.id, item)
-  return shop_message_list
+  bot.send_chat_action(message.chat.id, 'typing') # The typing state into the chat, so the bot will display the “typing” indicator.
+  bot.delete_message(message.chat.id, message.message_id)
+  if db_check_table_null():
+    db_create_table()
+  bot.send_message(
+    message.chat.id,
+    db_read_all(),
+    reply_markup=shop_markup_list(),
+    parse_mode = "MarkdownV2",
+    disable_notification=True
+  )
 
 @bot.message_handler
 def shop_command_add(message):
@@ -223,7 +231,7 @@ def callback_query(call):
  
 def shop_call_command_list(call):
    bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
-   send_exchange_result(call.message)
+   shop_command_list(call.message)
 
 def shop_call_command_add(call):
    bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
@@ -232,16 +240,6 @@ def shop_call_command_add(call):
 def shop_call_command_del(call):
    bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
    shop_command_del(call.message)
-
-def send_exchange_result(message):
-   bot.send_chat_action(message.chat.id, 'typing') # The typing state into the chat, so the bot will display the “typing” indicator.
-   text = "DATABASE ENTRIES"
-   bot.send_message(
-       message.chat.id, text,
-       reply_markup=shop_markup_list(),
-       parse_mode = "MarkdownV2",
-       disable_notification=True
-   )
 
 """
 @bot.callback_query_handler(func=lambda call: True)
