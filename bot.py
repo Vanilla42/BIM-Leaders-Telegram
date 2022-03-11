@@ -41,8 +41,10 @@ def db_create_table():
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE shopping (col_date VARCHAR(64), col_user_id VARCHAR(64), col_item VARCHAR(64))")
     cursor.execute("INSERT INTO shopping (col_date, col_user_id, col_item) VALUES (%s, %s, %s)", ("test", "test", "test"))
+    b = cursor.execute("SELECT * FROM shopping ORDERBY col_user_id")
     cursor.close()
     connection.close()
+    return b
 
 def db_read_all():
     connection = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=5432)
@@ -232,8 +234,8 @@ def shop_markup_list_my():
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
   if call.data == "shop_call_list":
-    db_create_table()
-    bot.send_message(call.message.chat.id, "TEST", parse_mode = "MarkdownV2")
+    b = db_create_table()
+    bot.send_message(call.message.chat.id, str(b), parse_mode = "MarkdownV2")
     shop_call_command_list(call)
   elif call.data == "shop_call_add":
     shop_call_command_add(call)
