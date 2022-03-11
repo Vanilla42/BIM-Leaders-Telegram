@@ -159,7 +159,13 @@ def shop_command_list(message):
 def shop_command_add(message):
   chat_id = message.chat.id
   text = db_read_all()
-  shop_message_add = bot.send_message(chat_id, text, parse_mode = "MarkdownV2", disable_notification=True, reply_markup=shop_markup_add())
+  shop_message_add = bot.send_message(
+    message.chat.id,
+    text,
+    reply_markup=shop_markup_add(),
+    parse_mode = "MarkdownV2",
+    disable_notification=True,
+  )
   return shop_message_add
 
 @bot.message_handler
