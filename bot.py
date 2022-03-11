@@ -233,7 +233,7 @@ def shop_call_command_del(call):
    bot.answer_callback_query(call.id) # Required to remove the loading state, which appears upon clicking the button.
    shop_command_del(call.message)
 
-def send_exchange_result(message, ex_code):
+def send_exchange_result(message):
    bot.send_chat_action(message.chat.id, 'typing') # The typing state into the chat, so the bot will display the “typing” indicator.
    text = "DATABASE ENTRIES"
    bot.send_message(
